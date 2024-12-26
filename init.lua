@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -354,6 +354,28 @@ require('lazy').setup({
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+
+      -- Lazygit
+      {
+        'kdheepak/lazygit.nvim',
+        lazy = true,
+        cmd = {
+          'LazyGit',
+          'LazyGitConfig',
+          'LazyGitCurrentFile',
+          'LazyGitFilter',
+          'LazyGitFilterCurrentFile',
+        },
+        -- optional for floating window border decoration
+        dependencies = {
+          'nvim-lua/plenary.nvim',
+        },
+        -- setting the keybinding for LazyGit with 'keys' is recommended in
+        -- order to load the plugin when the command is run for the first time
+        keys = {
+          { '<leader>lg', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
+        },
+      },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -930,7 +952,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
