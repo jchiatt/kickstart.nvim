@@ -102,7 +102,7 @@ vim.g.have_nerd_font = true
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -595,6 +595,7 @@ require('lazy').setup({
             if vim.fn.has 'nvim-0.11' == 1 then
               return client:supports_method(method, bufnr)
             else
+              ---@diagnostic disable-next-line
               return client.supports_method(method, { bufnr = bufnr })
             end
           end
@@ -696,7 +697,23 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         --  ts_ls = {},
-        --
+
+        bashls = {
+          cmd = { 'bash-language-server', 'start' },
+          filetypes = { 'bash', 'sh' },
+          root_markers = { '.git' },
+          settings = {
+            bashIde = {
+              globPattern = '*@(.sh|.inc|.bash|.command',
+            },
+          },
+        },
+
+        terraformls = {
+          cmd = { 'terraform-ls', 'serve' },
+          filetypes = { 'terraform', 'terraform-vars' },
+          root_markers = { '.terraform', 'git' },
+        },
 
         lua_ls = {
           -- cmd = { ... },
@@ -708,7 +725,7 @@ require('lazy').setup({
                 callSnippet = 'Replace',
               },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
+              diagnostics = { disable = { 'missing-fields' } },
             },
           },
         },
@@ -735,6 +752,7 @@ require('lazy').setup({
 
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+        automatic_enable = true,
         automatic_installation = false,
         handlers = {
           function(server_name)
@@ -958,7 +976,22 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'javascript', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'diff',
+        'go',
+        'html',
+        'javascript',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'typescript',
+        'vim',
+        'vimdoc',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -998,12 +1031,13 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
+  ---@diagnostic disable: missing-fields
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
